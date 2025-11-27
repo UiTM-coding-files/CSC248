@@ -12,15 +12,19 @@ public class AquaTrackMain{
             optEntered = true;
             if (opt == 1){
                 System.out.println(uiP.sample());
+                break;
             }
             else if (opt == 2){
                 System.out.println(uiP.viewSample());
+                break;
             }
             else if (opt == 3){
                 System.err.println(uiP.queuePending());
+                break;
             }
             else{
                 System.out.println("Invalid input please try again....");
+                break;
             }
             
         }
