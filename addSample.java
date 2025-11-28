@@ -1,6 +1,7 @@
 import java.util.Scanner;
 import java.util.InputMismatchException;
 public class addSample {
+    private int phLevel = 7, no3Level = 0, mgLevel = 0, nh3Level = 0;
     public void addSample(){
         Scanner input = new Scanner (System.in);
         String sampleMenu = """
@@ -15,4 +16,9 @@ public class addSample {
                 int opt = input.nextInt();
 
     }
+    private int phLevel(){
+        this.phLevel = phLevel;
+        return;
+    }
+
 }
