@@ -10,7 +10,8 @@ public class AquaTrackMain{
         System.out.print(uiP.menu());
         int opt = input.nextInt();
         boolean optEntered = false;
-
+        
+        //pandai2 buat ui
         while (true) {
             optEntered = true;
             switch (opt){
