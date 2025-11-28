@@ -7,7 +7,7 @@ public class AquaTrackMain{
         addSample add = new addSample();
         queuePending queue = new queuePending();
         viewSample view = new viewSample();
-        System.out.print(uiP.menu());
+        System.out.print(uiP.menu()); //placeholder nanti tukar juga 
         int opt = input.nextInt();
         boolean optEntered = false;
         
