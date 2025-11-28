@@ -5,25 +5,27 @@ public class AquaTrackMain{
         Scanner input = new Scanner(System.in);
         uiPrinter uiP = new uiPrinter();
         addSample add = new addSample();
+        queuePending queue = new queuePending();
+        viewSample view = new viewSample();
         System.out.print(uiP.menu());
         int opt = input.nextInt();
         boolean optEntered = false;
 
         while (true) {
             optEntered = true;
-            if (opt == 1){
+            switch (opt){
+            case 1:
                 add.addSample();
                 break;
-            }
-            else if (opt == 2){
-                System.out.println(uiP.viewSample());
+            case 2:
+                view.viewSample();
                 break;
-            }
-            else if (opt == 3){
-                System.err.println(uiP.queuePending());
+            
+            case 3:
+                queue.queuePending();
                 break;
-            }
-            else{
+            
+            default:
                 System.out.println("Invalid input please try again....");
                 break;
             }

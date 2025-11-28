@@ -4,6 +4,6 @@ public class queuePending{
                 Jamal kuontols
                 """;
                 System.out.print(queueMenu);
-                
+                return;
     }
 }

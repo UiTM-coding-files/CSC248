@@ -14,11 +14,13 @@ public class addSample {
                 System.out.println(sampleMenu);
                 System.out.print("^");
                 int opt = input.nextInt();
+                return;
 
     }
-    private int phLevel(){
+    /*private int phLevel(){
         this.phLevel = phLevel;
         return;
-    }
+        
+    }*/
 
 }

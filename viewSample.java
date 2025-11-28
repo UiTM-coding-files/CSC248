@@ -4,6 +4,6 @@ public class viewSample {
                 kamal kareem
                 """;
                 System.out.print(viewMenu);
-                
+                return;
     }
 }
