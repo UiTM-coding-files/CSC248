@@ -11,7 +11,7 @@ public class uiPrinter {
                 |3. View pending task/s     |
                 +---------------------------+
 
-                ^:
+                ^
                 """;
     }
     public String sample(){

@@ -4,14 +4,15 @@ public class AquaTrackMain{
     public static void main(String[] args){
         Scanner input = new Scanner(System.in);
         uiPrinter uiP = new uiPrinter();
-        System.out.println(uiP.menu());
+        addSample add = new addSample();
+        System.out.print(uiP.menu());
         int opt = input.nextInt();
         boolean optEntered = false;
 
         while (true) {
             optEntered = true;
             if (opt == 1){
-                System.out.println(uiP.sample());
+                add.addSample();
                 break;
             }
             else if (opt == 2){
