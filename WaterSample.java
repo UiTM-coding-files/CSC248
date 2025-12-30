@@ -36,8 +36,69 @@ public class WaterSample {
         return sampleID;
     }
 
+    public double getTemp() {
+        return temp;
+    }
+
+    public double getPHlvl() {
+        return pHlvl;
+    }
+
+    public double getAmmoniaLvl() {
+        return ammoniaLvl;
+    }
+
+    public double getNitriteLvl() {
+        return nitriteLvl;
+    }
+
+    public double getNitrateLvl() {
+        return nitrateLvl;
+    }
+
+    public double getAlkalinityLvl() {
+        return alkalinityLvl;
+    }
+
+    public double getGeneralHardness() {
+        return generalHardness;
+    }
+
     public String getRiskLvl() {
         return riskLvl;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    //------------------------ SETTTER METHODS ------------------------
+    public void setTemp(double temp) {
+        this.temp = temp;
+    }
+
+    public void setPHlvl(double pHlvl) {
+        this.pHlvl = pHlvl;
+    }
+
+    public void setAmmoniaLvl(double ammoniaLvl) {
+        this.ammoniaLvl = ammoniaLvl;
+    }
+
+    public void setNitriteLvl(double nitriteLvl) {
+        this.nitriteLvl = nitriteLvl;
+    }
+
+    public void setNitrateLvl(double nitrateLvl) {
+        this.nitrateLvl = nitrateLvl;
+    }
+
+    public void setAlkalinityLvl(double alkalinityLvl) {
+        this.alkalinityLvl = alkalinityLvl;
+    }
+
+    public void setGeneralHardness(double generalHardness) {
+        this.generalHardness = generalHardness;
     }
 
     //------------------------ SAMPLE METHODS ------------------------
@@ -94,8 +155,7 @@ public class WaterSample {
             while ((line = br.readLine()) != null) {
                 lastLine = line;
             }
-        } catch (IOException ignored) {
-        }
+        } catch (IOException ignored) {}
 
         if (lastLine == null) {
             return "001";
@@ -107,7 +167,7 @@ public class WaterSample {
 
     //------------------------ ADD SAMPLE ------------------------
     public static void addSample(Scanner input, SampleLinkedList<WaterSample> normalList,
-            TaskQueue<WaterSample> riskQueue) {
+                                 TaskQueue<WaterSample> riskQueue) {
 
         String id = generateID();
         System.out.print("Temperature: ");
@@ -184,7 +244,7 @@ public class WaterSample {
         // Search in Normal List
         WaterSample ws = normalList.getFirst();
         while (ws != null) {
-            if (ws.sampleID.equals(key)) {
+            if (ws.getSampleID().equals(key)) {
                 ws.displayFullSample();
 
                 System.out.print("Do you want to edit this sample? [Y/N]: ");
@@ -231,19 +291,19 @@ public class WaterSample {
     //------------------------ EDIT SAMPLE ------------------------
     private static void editSample(WaterSample ws, Scanner input) {
         System.out.print("New Temperature: ");
-        ws.temp = input.nextDouble();
+        ws.setTemp(input.nextDouble());
         System.out.print("New pH Level: ");
-        ws.pHlvl = input.nextDouble();
+        ws.setPHlvl(input.nextDouble());
         System.out.print("New Ammonia Level: ");
-        ws.ammoniaLvl = input.nextDouble();
+        ws.setAmmoniaLvl(input.nextDouble());
         System.out.print("New Nitrite Level: ");
-        ws.nitriteLvl = input.nextDouble();
+        ws.setNitriteLvl(input.nextDouble());
         System.out.print("New Nitrate Level: ");
-        ws.nitrateLvl = input.nextDouble();
+        ws.setNitrateLvl(input.nextDouble());
         System.out.print("New Alkalinity Level: ");
-        ws.alkalinityLvl = input.nextDouble();
+        ws.setAlkalinityLvl(input.nextDouble());
         System.out.print("New General Hardness: ");
-        ws.generalHardness = input.nextDouble();
+        ws.setGeneralHardness(input.nextDouble());
         input.nextLine();
 
         ws.determineRisk();
@@ -274,7 +334,7 @@ public class WaterSample {
         WaterSample current = list.getFirst();
 
         while (current != null) {
-            if (current.sampleID.equals(id)) {
+            if (current.getSampleID().equals(id)) {
                 if (prev == null) {
                     list.removeFirst();
                 } else {
