@@ -1,7 +1,10 @@
 public class queuePending{
     public void queuePending(){
         String queueMenu = """
-                Jamal kuontols
+                +----------------------------------+
+                | 1. Pending maintenance list      |
+                +----------------------------------+
+                | 2. 
                 """;
                 System.out.print(queueMenu);
                 return;
