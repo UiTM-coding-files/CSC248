@@ -4,7 +4,7 @@ public class AquaTrackMain{
     public static void main(String[] args){
         Scanner input = new Scanner(System.in);
         uiPrinter uiP = new uiPrinter();
-        addSample add = new addSample();
+        //addSample add = new addSample();
         queuePending queue = new queuePending();
         viewSample view = new viewSample();
         System.out.print(uiP.menu()); //placeholder x pakai
@@ -16,7 +16,7 @@ public class AquaTrackMain{
             optEntered = true;
             switch (opt){
             case 1:
-                add.addSample();
+                //add.addSample();
                 break;
             case 2:
                 view.viewSample();

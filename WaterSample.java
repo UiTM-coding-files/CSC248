@@ -13,7 +13,7 @@ public class WaterSample {
     private final String date;
     private String riskLvl;
 
-    //------------------------ CONSTRUCTOR ------------------------
+    // ------------------------ CONSTRUCTOR ------------------------
     public WaterSample(String sampleID, double temp, double pHlvl, double ammoniaLvl,
             double nitriteLvl, double nitrateLvl, double alkalinityLvl,
             double generalHardness, String date) {
@@ -31,7 +31,7 @@ public class WaterSample {
         determineRisk();
     }
 
-    //------------------------ GETTTER METHODS ------------------------
+    // ------------------------ GETTTER METHODS ------------------------
     public String getSampleID() {
         return sampleID;
     }
@@ -72,7 +72,7 @@ public class WaterSample {
         return date;
     }
 
-    //------------------------ SETTTER METHODS ------------------------
+    // ------------------------ SETTTER METHODS ------------------------
     public void setTemp(double temp) {
         this.temp = temp;
     }
@@ -101,20 +101,20 @@ public class WaterSample {
         this.generalHardness = generalHardness;
     }
 
-    //------------------------ SAMPLE METHODS ------------------------
+    // ------------------------ SAMPLE METHODS ------------------------
     public static void wSample(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
         Scanner input = new Scanner(System.in);
         int opt;
 
         do {
             String sampleMenu = """
-                +------------------------+
-                | 1. Add new sample      |
-                | 2. Search sample(s)    |
-                | 3. Remove samples(s)   |
-                | 4. Back to Main Menu   |
-                +------------------------+
-                """;
+                    +------------------------+
+                    | 1. Add new sample      |
+                    | 2. Search sample(s)    |
+                    | 3. Remove samples(s)   |
+                    | 4. Back to Main Menu   |
+                    +------------------------+
+                    """;
             System.out.println(sampleMenu);
             System.out.print("Choose Option: ");
             opt = input.nextInt();
@@ -146,7 +146,7 @@ public class WaterSample {
         } while (opt != 4);
     }
 
-    //------------------------ AUTO ID GENERATION ------------------------
+    // ------------------------ AUTO ID GENERATION ------------------------
     private static String generateID() {
         String lastLine = null;
 
@@ -155,7 +155,8 @@ public class WaterSample {
             while ((line = br.readLine()) != null) {
                 lastLine = line;
             }
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
 
         if (lastLine == null) {
             return "001";
@@ -165,9 +166,9 @@ public class WaterSample {
         return String.format("%03d", lastID + 1);
     }
 
-    //------------------------ ADD SAMPLE ------------------------
+    // ------------------------ ADD SAMPLE ------------------------
     public static void addSample(Scanner input, SampleLinkedList<WaterSample> normalList,
-                                 TaskQueue<WaterSample> riskQueue) {
+            TaskQueue<WaterSample> riskQueue) {
 
         String id = generateID();
         System.out.print("Temperature: ");
@@ -202,7 +203,7 @@ public class WaterSample {
         System.out.println();
     }
 
-    //------------------------ DETERMINE RISK LEVEL ------------------------
+    // ------------------------ DETERMINE RISK LEVEL ------------------------
     private void determineRisk() {
         int score = 0;
 
@@ -237,7 +238,7 @@ public class WaterSample {
         }
     }
 
-    //------------------------ SEARCH AND EDIT ------------------------
+    // ------------------------ SEARCH AND EDIT ------------------------
     public static void SearchAndEdit(String key, SampleLinkedList<WaterSample> normalList,
             TaskQueue<WaterSample> riskQueue, Scanner input) {
 
@@ -250,14 +251,14 @@ public class WaterSample {
                 System.out.print("Do you want to edit this sample? [Y/N]: ");
                 String choice = input.nextLine();
 
-                if(choice.equalsIgnoreCase("Y")){
+                if (choice.equalsIgnoreCase("Y")) {
                     editSample(ws, input);
                     writeAllToFile(normalList, riskQueue);
                     System.out.println("Sample Updated.\n");
                 } else {
                     System.out.println("Edit cancelled.\n");
                 }
-                return; //go back to menu
+                return; // go back to menu
             }
             ws = normalList.getNext();
         }
@@ -272,23 +273,23 @@ public class WaterSample {
                 System.out.print("Do you want to edit this sample? [Y/N]: ");
                 String choice = input.nextLine();
 
-                if(choice.equalsIgnoreCase("Y")){
+                if (choice.equalsIgnoreCase("Y")) {
                     editSample(ws, input);
                     writeAllToFile(normalList, riskQueue);
                     System.out.println("Sample Updated.\n");
                 } else {
                     System.out.println("Edit cancelled.\n");
                 }
-                return; //go back to menu
+                return; // go back to menu
             }
             ws = q.getNext();
         }
 
-        //not found
+        // not found
         System.out.println("Sample Not Found.\n");
     }
 
-    //------------------------ EDIT SAMPLE ------------------------
+    // ------------------------ EDIT SAMPLE ------------------------
     private static void editSample(WaterSample ws, Scanner input) {
         System.out.print("New Temperature: ");
         ws.setTemp(input.nextDouble());
@@ -309,7 +310,7 @@ public class WaterSample {
         ws.determineRisk();
     }
 
-    //------------------------ REMOVE SAMPLE ------------------------
+    // ------------------------ REMOVE SAMPLE ------------------------
     public static void removeSample(String id, SampleLinkedList<WaterSample> normalList,
             TaskQueue<WaterSample> riskQueue) {
         boolean removed = false;
@@ -348,7 +349,7 @@ public class WaterSample {
         return false;
     }
 
-    //------------------------ DISPLAY SAMPLE ------------------------
+    // ------------------------ DISPLAY SAMPLE ------------------------
     public void displayFullSample() {
         System.out.println("ID: " + sampleID);
         System.out.println("Temperature: " + temp);
@@ -362,44 +363,44 @@ public class WaterSample {
         System.out.println("Date: " + date);
     }
 
-    //------------------------ FILE WRITER ------------------------
+    // ------------------------ FILE WRITER ------------------------
     private static void writeAllToFile(SampleLinkedList<WaterSample> normalList,
             TaskQueue<WaterSample> riskQueue) {
 
         ArrayList<WaterSample> allSamples = new ArrayList<>();
 
-        //collect normal samples
+        // collect normal samples
         WaterSample ws = normalList.getFirst();
-        while(ws != null){
+        while (ws != null) {
             allSamples.add(ws);
             ws = normalList.getNext();
         }
 
-         //collect risk samples
+        // collect risk samples
         SampleLinkedList<WaterSample> q = riskQueue.getList();
         ws = q.getFirst();
-        while(ws != null){
+        while (ws != null) {
             allSamples.add(ws);
             ws = q.getNext();
         }
 
-        //Sort Samples By sampleID
+        // Sort Samples By sampleID
         int n = allSamples.size();
         WaterSample temp;
 
-        for(int i = 0; i < n; i++){
-            for(int j = 1; j< (n-i); j++){
-                if(allSamples.get(j-1).getSampleID().compareTo(allSamples.get(j).getSampleID()) > 0){
-                    //swap elements
-                    temp = allSamples.get(j-1);
-                    allSamples.set(j-1, allSamples.get(j));
+        for (int i = 0; i < n; i++) {
+            for (int j = 1; j < (n - i); j++) {
+                if (allSamples.get(j - 1).getSampleID().compareTo(allSamples.get(j).getSampleID()) > 0) {
+                    // swap elements
+                    temp = allSamples.get(j - 1);
+                    allSamples.set(j - 1, allSamples.get(j));
                     allSamples.set(j, temp);
                 }
             }
         }
 
         try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_NAME))) {
-            for(int i = 0; i < allSamples.size(); i++){
+            for (int i = 0; i < allSamples.size(); i++) {
                 pw.println(allSamples.get(i));
             }
         } catch (IOException e) {
