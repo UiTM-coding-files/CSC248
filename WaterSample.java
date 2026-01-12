@@ -310,6 +310,25 @@ public class WaterSample {
         ws.determineRisk();
     }
 
+            // ------------------------ TO CARD FORMAT ------------------------
+     public String[] toCard() {
+        return new String[] {
+            "+-----------------------------+",
+            "ID: " + sampleID,
+            "Date: " + date,
+            "Temp: " + temp + " °C",
+            "pH: " + pHlvl,
+            "Ammonia: " + ammoniaLvl,
+            "Nitrite: " + nitriteLvl,
+            "Nitrate: " + nitrateLvl,
+            "Alkalinity: " + alkalinityLvl,
+            "General Hardness: " + generalHardness,
+            "Risk Level: " + riskLvl,
+            "Date: " + date,
+            "+-----------------------------+"
+        };
+    };
+
     // ------------------------ REMOVE SAMPLE ------------------------
     public static void removeSample(String id, SampleLinkedList<WaterSample> normalList,
             TaskQueue<WaterSample> riskQueue) {
@@ -422,3 +441,4 @@ public class WaterSample {
                 + date;
     }
 }
+
