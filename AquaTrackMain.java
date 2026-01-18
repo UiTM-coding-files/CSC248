@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 public class AquaTrackMain{
@@ -11,12 +12,15 @@ public class AquaTrackMain{
         Scanner in = new Scanner(System.in);
         SampleLinkedList<WaterSample> normalList = new SampleLinkedList<>();
         TaskQueue<WaterSample> riskQueue = new TaskQueue<>();
+        sampleDisplay sampleDisplay = new sampleDisplay();
 
-
+    System.out.print("Enter 1(add),2(view),3,0(exit): ");
     do{
-        System.out.print("Enter 1(add),2(view),3,0(exit): ");
+        try{
+        
         opt = in.nextInt();
             if(opt == 1){
+                sampleDisplay.clearScreen();
         // ---------- READ FILE & SEPARATE ----------
         try (BufferedReader br = new BufferedReader(new FileReader("Samples.txt"))) {
             String line;
@@ -32,12 +36,9 @@ public class AquaTrackMain{
                 double nitrate = Double.parseDouble(data[5]);
                 double alkalinity = Double.parseDouble(data[6]);
                 double gh = Double.parseDouble(data[7]);
-                String date = data[9]; // risk is auto-calculated
+                LocalDate date = LocalDate.parse(data[9]); // risk is auto-calculated
 
-                WaterSample ws = new WaterSample(
-                        id, temp, pH, ammonia, nitrite,
-                        nitrate, alkalinity, gh, date
-                );
+                WaterSample ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date);
 
                 if (ws.getRiskLvl().equals("Normal")) {
                     normalList.addLast(ws);
@@ -55,6 +56,7 @@ public class AquaTrackMain{
     }
 
     else if(opt == 2){
+        sampleDisplay.clearScreen();
 
             ArrayList<WaterSample> Samples = SampleDataLoader.loadFromFile("Samples.txt");
 
@@ -64,9 +66,11 @@ public class AquaTrackMain{
     else if(opt == 3){
 
     }
-
-
-
+    else if(opt != 0) System.out.print("Invalid option. Please try again: ");
+}catch(Exception e){
+    System.out.print("Invalid input. Please try again: ");
+    in.nextLine();
+    }
 
     }while(opt != 0);
         }
