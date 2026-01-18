@@ -8,10 +8,10 @@ public class sampleDisplay {
     public static void displayPaging(ArrayList<WaterSample> samples){
         Scanner in = new Scanner(System.in);
         int page = 0;
-        int choice;
+        int choice = -1;
 
         do{
-            clearScreen();
+            //clearScreen();
             if(samples.isEmpty()){
                 System.out.println("No samples to display.");
                 break;
@@ -25,24 +25,43 @@ public class sampleDisplay {
             System.out.println("Page " + (page + 1) + " of " + ((samples.size() - 1) / samples_per_page + 1));
 
             System.out.println("\nOptions: ");
-            if(page > 0) System.out.println("2 - Previous Page");
             if(end < samples.size()) System.out.println("1 - Next Page");
+            if(page > 0) System.out.println("2 - Previous Page");
             System.out.println("3 - Sort by Date (Oldest to Newest)");
             System.out.println("4 - Sort by Risk Level (High to Low)");
+            System.out.println("5 - View Statistics");
             System.out.println("0 - Exit to Main Menu");
             System.out.print("Enter choice: ");
+            try{
             choice = in.nextInt();
 
-            if(choice == 1 && end < samples.size()) page++;
-            else if(choice == 2 && page > 0) page--;
+                if(choice == 1 && end < samples.size()) {clearScreen(); page++;}
+            else if(choice == 2 && page > 0) {clearScreen(); page--;}
             else if (choice == 3){
+                clearScreen();
                 SortByDate(samples);
                 page = 0;
             }
             else if (choice == 4){
+                clearScreen();
                 SortByRisk(samples);
                 page = 0;
             }
+            else if (choice == 5){
+                clearScreen();
+                statistics(samples);
+                System.out.println("\nPress Enter to return to paging view...");
+                in.nextLine();
+                in.nextLine(); 
+            }
+            else if (choice != 0){
+                System.out.println("Invalid choice. Please try again.");
+                System.out.println("Press Enter to continue...");
+                in.nextLine();
+                in.nextLine();}
+        }catch(Exception e){
+            System.out.println("Invalid input. Please enter a number corresponding to the options.");
+            in.nextLine(); }
 
 
         }while(choice != 0);
@@ -84,7 +103,7 @@ private static int riskValue(String risk) {
     return switch (risk) {
         case "High" -> 3;
         case "Moderate" -> 2;
-        case "Low" -> 1;
+        case "Normal" -> 1;
         default -> 0;
     };
 }
@@ -105,22 +124,50 @@ public static void SortByRisk(ArrayList<WaterSample> data) {
     }
 }
 
+public static void statistics(ArrayList<WaterSample> samples) {
+    int totalSamples = samples.size();
+    int highRiskCount = 0;
+    int moderateRiskCount = 0;
+    int normalRiskCount = 0;
+
+
+    for(int i = 0; i<samples.size(); i++){
+        String risk = samples.get(i).getRiskLvl();
+        if(risk.equalsIgnoreCase("High")){
+            highRiskCount++;
+        }
+        else if(risk.equalsIgnoreCase("Moderate")){
+            moderateRiskCount++;
+        }
+        else if(risk.equalsIgnoreCase("Normal")){
+            normalRiskCount++;
+        }
+    }
+    double highRiskPercentage = highRiskCount * 100.0 / totalSamples;
+    double moderateRiskPercentage = moderateRiskCount * 100.0 / totalSamples;
+    double normalRiskPercentage = normalRiskCount * 100.0 / totalSamples;
+
+    System.out.println("Total Samples: " + totalSamples);
+    System.out.println("High Risk Samples: " + highRiskCount);
+    System.out.println("Moderate Risk Samples: " + moderateRiskCount);
+    System.out.println("Normal Risk Samples: " + normalRiskCount);
+    System.out.println("");
+    System.out.println("Risk Level      Percentage");
+    System.out.println("---------------------------");
+    System.out.printf("%-15s %.2f%%%n", "High", highRiskPercentage);
+    System.out.printf("%-15s %.2f%%%n", "Moderate", moderateRiskPercentage);
+    System.out.printf("%-15s %.2f%%%n", "Normal", normalRiskPercentage);
+
+
+}
+
 
 
 
 
     public static void clearScreen(){
-        try{
-            String os = System.getProperty("os.name").toLowerCase();
-            if(os.contains("win")){
-                new ProcessBuilder("cdm", "/c", "cls").inheritIO().start().waitFor();
-            }
-            else{
-                new ProcessBuilder("clear").inheritIO().start().waitFor();
-            }
-        }catch(Exception e){
                 System.out.print("\033[H\033[2J");
                 System.out.flush();
-            }
+            
         }
     }
