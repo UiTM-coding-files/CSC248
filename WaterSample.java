@@ -1,6 +1,8 @@
-
 import java.io.*;
 import java.util.ArrayList; // for sorting only
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 public class WaterSample {
@@ -10,13 +12,14 @@ public class WaterSample {
     private final String sampleID;
     private double temp, pHlvl, ammoniaLvl, nitriteLvl, nitrateLvl;
     private double alkalinityLvl, generalHardness;
-    private final String date;
+    private LocalDate date;
     private String riskLvl;
+
 
     // ------------------------ CONSTRUCTOR ------------------------
     public WaterSample(String sampleID, double temp, double pHlvl, double ammoniaLvl,
             double nitriteLvl, double nitrateLvl, double alkalinityLvl,
-            double generalHardness, String date) {
+            double generalHardness, LocalDate date) {
 
         this.sampleID = sampleID;
         this.temp = temp;
@@ -68,7 +71,7 @@ public class WaterSample {
         return riskLvl;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
@@ -104,6 +107,7 @@ public class WaterSample {
     // ------------------------ SAMPLE METHODS ------------------------
     public static void wSample(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
         Scanner input = new Scanner(System.in);
+        
         int opt;
 
         do {
@@ -187,7 +191,9 @@ public class WaterSample {
         double gh = input.nextDouble();
         System.out.print("Date [YYYY-MM-DD]: ");
         input.nextLine();
-        String date = input.nextLine();
+        String ip = input.nextLine();
+        LocalDate date = LocalDate.parse(ip); 
+ 
 
         WaterSample ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alk, gh, date);
 
@@ -310,25 +316,6 @@ public class WaterSample {
         ws.determineRisk();
     }
 
-            // ------------------------ TO CARD FORMAT ------------------------
-     public String[] toCard() {
-        return new String[] {
-            "+-----------------------------+",
-            "ID: " + sampleID,
-            "Date: " + date,
-            "Temp: " + temp + " °C",
-            "pH: " + pHlvl,
-            "Ammonia: " + ammoniaLvl,
-            "Nitrite: " + nitriteLvl,
-            "Nitrate: " + nitrateLvl,
-            "Alkalinity: " + alkalinityLvl,
-            "General Hardness: " + generalHardness,
-            "Risk Level: " + riskLvl,
-            "Date: " + date,
-            "+-----------------------------+"
-        };
-    };
-
     // ------------------------ REMOVE SAMPLE ------------------------
     public static void removeSample(String id, SampleLinkedList<WaterSample> normalList,
             TaskQueue<WaterSample> riskQueue) {
@@ -381,6 +368,25 @@ public class WaterSample {
         System.out.println("Risk Level: " + riskLvl);
         System.out.println("Date: " + date);
     }
+
+        // ------------------------ TO CARD FORMAT ------------------------
+     public String[] toCard() {
+        return new String[] {
+            "+-----------------------------+",
+            "ID: " + sampleID,
+            "Date: " + date,
+            "Temp: " + temp + " °C",
+            "pH: " + pHlvl,
+            "Ammonia: " + ammoniaLvl,
+            "Nitrite: " + nitriteLvl,
+            "Nitrate: " + nitrateLvl,
+            "Alkalinity: " + alkalinityLvl,
+            "General Hardness: " + generalHardness,
+            "Risk Level: " + riskLvl,
+            "Date: " + date,
+            "+-----------------------------+"
+        };
+    };
 
     // ------------------------ FILE WRITER ------------------------
     private static void writeAllToFile(SampleLinkedList<WaterSample> normalList,
@@ -441,4 +447,3 @@ public class WaterSample {
                 + date;
     }
 }
-
