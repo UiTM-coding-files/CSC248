@@ -1,8 +1,6 @@
 import java.io.*;
-import java.util.ArrayList; // for sorting only
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.time.LocalDate; // for sorting only
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class WaterSample {
@@ -14,6 +12,7 @@ public class WaterSample {
     private double alkalinityLvl, generalHardness;
     private LocalDate date;
     private String riskLvl;
+    private boolean actionTaken = false;
 
 
     // ------------------------ CONSTRUCTOR ------------------------
@@ -30,6 +29,25 @@ public class WaterSample {
         this.alkalinityLvl = alkalinityLvl;
         this.generalHardness = generalHardness;
         this.date = date;
+        this.actionTaken = false;
+
+        determineRisk();
+    }
+
+    public WaterSample(String sampleID, double temp, double pHlvl, double ammoniaLvl,
+            double nitriteLvl, double nitrateLvl, double alkalinityLvl,
+            double generalHardness, LocalDate date, boolean actionTaken) {
+
+        this.sampleID = sampleID;
+        this.temp = temp;
+        this.pHlvl = pHlvl;
+        this.ammoniaLvl = ammoniaLvl;
+        this.nitriteLvl = nitriteLvl;
+        this.nitrateLvl = nitrateLvl;
+        this.alkalinityLvl = alkalinityLvl;
+        this.generalHardness = generalHardness;
+        this.date = date;
+        this.actionTaken = actionTaken;
 
         determineRisk();
     }
@@ -69,6 +87,14 @@ public class WaterSample {
 
     public String getRiskLvl() {
         return riskLvl;
+    }
+
+    public boolean isActionTaken() {
+        return actionTaken;
+    }
+
+    public void setActionTaken(boolean actionTaken) {
+        this.actionTaken = actionTaken;
     }
 
     public LocalDate getDate() {
@@ -389,7 +415,7 @@ public class WaterSample {
     };
 
     // ------------------------ FILE WRITER ------------------------
-    private static void writeAllToFile(SampleLinkedList<WaterSample> normalList,
+    public static void writeAllToFile(SampleLinkedList<WaterSample> normalList,
             TaskQueue<WaterSample> riskQueue) {
 
         ArrayList<WaterSample> allSamples = new ArrayList<>();
@@ -444,6 +470,6 @@ public class WaterSample {
                 + alkalinityLvl + ","
                 + generalHardness + ","
                 + riskLvl + ","
-                + date;
+                + date + "," + actionTaken;
     }
 }

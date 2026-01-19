@@ -37,8 +37,17 @@ public class AquaTrackMain{
                 double alkalinity = Double.parseDouble(data[6]);
                 double gh = Double.parseDouble(data[7]);
                 LocalDate date = LocalDate.parse(data[9]); // risk is auto-calculated
+                boolean actionTaken = false;
+                if (data.length > 10) {
+                    try { actionTaken = Boolean.parseBoolean(data[10]); } catch (Exception ignored) {}
+                }
 
-                WaterSample ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date);
+                WaterSample ws;
+                if (data.length > 10) {
+                    ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date, actionTaken);
+                } else {
+                    ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date);
+                }
 
                 if (ws.getRiskLvl().equals("Normal")) {
                     normalList.addLast(ws);
@@ -64,7 +73,52 @@ public class AquaTrackMain{
         
     }
     else if(opt == 3){
+        sampleDisplay.clearScreen();
+        // load samples from file into lists before showing pending menu
+        normalList.clear();
+        // clear riskQueue by creating new one
+        riskQueue = new TaskQueue<>();
 
+        try (BufferedReader br = new BufferedReader(new FileReader("Samples.txt"))) {
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                String[] data = line.split(",");
+
+                String id = data[0];
+                double temp = Double.parseDouble(data[1]);
+                double pH = Double.parseDouble(data[2]);
+                double ammonia = Double.parseDouble(data[3]);
+                double nitrite = Double.parseDouble(data[4]);
+                double nitrate = Double.parseDouble(data[5]);
+                double alkalinity = Double.parseDouble(data[6]);
+                double gh = Double.parseDouble(data[7]);
+                java.time.LocalDate date = java.time.LocalDate.parse(data[9]);
+                boolean actionTaken = false;
+                if (data.length > 10) {
+                    try { actionTaken = Boolean.parseBoolean(data[10]); } catch (Exception ignored) {}
+                }
+
+                WaterSample ws;
+                if (data.length > 10) {
+                    ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date, actionTaken);
+                } else {
+                    ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date);
+                }
+
+                if (ws.getRiskLvl().equals("Normal")) {
+                    normalList.addLast(ws);
+                } else {
+                    riskQueue.enqueue(ws);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error reading Samples.txt");
+        }
+
+        queuePending qp = new queuePending();
+        qp.queuePending(normalList, riskQueue);
     }
     else if(opt != 0) System.out.print("Invalid option. Please try again: ");
 }catch(Exception e){

@@ -25,8 +25,19 @@ static final int row_per_page = 2;
                 double alkalinity = Double.parseDouble(data[6]);
                 double gh = Double.parseDouble(data[7]);
                 LocalDate date = LocalDate.parse(data[9]);
+                boolean actionTaken = false;
+                if (data.length > 10) {
+                    try {
+                        actionTaken = Boolean.parseBoolean(data[10]);
+                    } catch (Exception ignored) {}
+                }
 
-                WaterSample ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date);
+                WaterSample ws;
+                if (data.length > 10) {
+                    ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date, actionTaken);
+                } else {
+                    ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date);
+                }
                 sampleList.add(ws);
             }
         } catch (IOException e) {
