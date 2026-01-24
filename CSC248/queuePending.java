@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class queuePending {
+    private static sampleDisplay sampleD = new sampleDisplay();
 
     // Main menu untuk module Pending Task
     public void queuePending(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
@@ -30,14 +31,17 @@ public class queuePending {
 
             switch (opt) {
                 case 1:
+                    sampleD.clearScreen();
                     pendingList(normalList, riskQueue);
                     break;
 
                 case 2:
+                    sampleD.clearScreen();
                     update(normalList, riskQueue, in);
                     break;
 
                 case 3:
+                    sampleD.clearScreen();
                     suggest(normalList, riskQueue);
                     break;
 
@@ -50,14 +54,14 @@ public class queuePending {
             }
 
         } while (opt != 4);
-        System.out.println("bug");
+        sampleDisplay.clearScreen();
     }
 
     // Menu untuk pendingList
     public void pendingList(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
-        sampleDisplay.clearScreen();
-        System.out.println("Pending Maintenance List (Moderate/High risk, action not taken):\n");
-
+        
+        //System.out.println("Pending Maintenance List (Moderate/High risk, action not taken):\n");
+        //sampleDisplay.clearScreen();
         ArrayList<WaterSample> filteredSamples = new ArrayList<>();
 
         SampleLinkedList<WaterSample> list = riskQueue.getList();
@@ -147,9 +151,7 @@ public class queuePending {
     public void suggest(SampleLinkedList<WaterSample> normalList,TaskQueue<WaterSample> riskQueue) {
 
     LocalDate cutoff = LocalDate.now().minusDays(2);
-
     ArrayList<WaterSample> result = new ArrayList<>();
-
     SampleLinkedList<WaterSample>[] lists = new SampleLinkedList[] { riskQueue.getList(), normalList };
 
     for (SampleLinkedList<WaterSample> l : lists) {
