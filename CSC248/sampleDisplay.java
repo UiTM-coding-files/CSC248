@@ -35,7 +35,7 @@ public class sampleDisplay {
             try{
             choice = in.nextInt();
 
-                if(choice == 1 && end < samples.size()) {clearScreen(); page++;}
+            if(choice == 1 && end < samples.size()) {clearScreen(); page++;}
             else if(choice == 2 && page > 0) {clearScreen(); page--;}
             else if (choice == 3){
                 clearScreen();
@@ -65,6 +65,7 @@ public class sampleDisplay {
 
 
         }while(choice != 0);
+        clearScreen();
     }
 
     
@@ -76,6 +77,8 @@ public class sampleDisplay {
 
         do{
             //clearScreen();
+            System.out.println("Pending Maintenance List (Moderate/High risk, action not taken):\n");
+            
             if(samples.isEmpty()){
                 System.out.println("No samples to display.");
                 break;
@@ -96,19 +99,22 @@ public class sampleDisplay {
             try{
             choice = in.nextInt();
 
-                if(choice == 1 && end < samples.size()) {clearScreen(); page++;}
+            if(choice == 1 && end < samples.size()) {clearScreen(); page++;}
             else if(choice == 2 && page > 0) {clearScreen(); page--;}
             else if (choice != 0){
-                System.out.println("Invalid choice. Please try again.");
+                /*System.out.println("Invalid choice. Please try again.");
                 System.out.println("Press Enter to continue...");
                 in.nextLine();
-                in.nextLine();}
+                in.nextLine();*/
+            }
         }catch(Exception e){
+            clearScreen();
             System.out.println("Invalid input. Please enter a number corresponding to the options.");
             in.nextLine(); }
 
 
         }while(choice != 0);
+        clearScreen();
     }
     
     public static void suggestDisplay(ArrayList<WaterSample> result){
@@ -140,16 +146,19 @@ public class sampleDisplay {
                 if(choice == 1 && end < result.size()) {clearScreen(); page++;}
             else if(choice == 2 && page > 0) {clearScreen(); page--;}
             else if (choice != 0){
-                System.out.println("Invalid choice. Please try again.");
+                /*System.out.println("Invalid choice. Please try again.");
                 System.out.println("Press Enter to continue...");
                 in.nextLine();
-                in.nextLine();}
+                in.nextLine();*/
+            }
         }catch(Exception e){
+            clearScreen();
             System.out.println("Invalid input. Please enter a number corresponding to the options.");
             in.nextLine(); }
 
 
         }while(choice != 0);
+        clearScreen();
     }
 
     public static void printGrid(ArrayList<WaterSample> samples){
