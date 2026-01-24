@@ -13,6 +13,7 @@ public class WaterSample {
     private LocalDate date;
     private String riskLvl;
     private boolean actionTaken = false;
+    private static sampleDisplay sampleD = new sampleDisplay();
 
     // ------------------------ CONSTRUCTOR ------------------------
     public WaterSample(String sampleID, double temp, double pHlvl, double ammoniaLvl,
@@ -151,22 +152,26 @@ public class WaterSample {
 
             switch (opt) {
                 case 1:
+                    sampleD.clearScreen();
                     addSample(input, normalList, riskQueue);
                     break;
 
                 case 2:
+                    sampleD.clearScreen();
                     System.out.print("Enter sample ID to Search: ");
                     String key = input.nextLine();
                     SearchAndEdit(key, normalList, riskQueue, input);
                     break;
 
                 case 3:
+                    sampleD.clearScreen();
                     System.out.print("Enter sample ID to Remove: ");
                     String id = input.nextLine();
                     removeSample(id, normalList, riskQueue);
                     break;
 
                 case 4:
+                    sampleD.clearScreen();
                     break;
 
                 default:
@@ -196,41 +201,34 @@ public class WaterSample {
     }
 
     // ------------------------ ADD SAMPLE ------------------------
-    public static void addSample(Scanner input, SampleLinkedList<WaterSample> normalList,
+    public static void addSample(Scanner input,
+            SampleLinkedList<WaterSample> normalList,
             TaskQueue<WaterSample> riskQueue) {
 
         String id = generateID();
-        System.out.print("Temperature: ");
-        double temp = input.nextDouble();
-        System.out.print("pH Level: ");
-        double pH = input.nextDouble();
-        System.out.print("Ammonia Level: ");
-        double ammonia = input.nextDouble();
-        System.out.print("Nitrite Level: ");
-        double nitrite = input.nextDouble();
-        System.out.print("Nitrate Level: ");
-        double nitrate = input.nextDouble();
-        System.out.print("Alkalinity Level: ");
-        double alk = input.nextDouble();
-        System.out.print("General Hardness: ");
-        double gh = input.nextDouble();
-        System.out.print("Date [YYYY-MM-DD]: ");
-        input.nextLine();
-        String ip = input.nextLine();
-        LocalDate date = LocalDate.parse(ip);
 
-        WaterSample ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alk, gh, date);
+        double temp = readDouble(input, "Temperature: ");
+        double pH = readDouble(input, "pH Level: ");
+        double ammonia = readDouble(input, "Ammonia Level: ");
+        double nitrite = readDouble(input, "Nitrite Level: ");
+        double nitrate = readDouble(input, "Nitrate Level: ");
+        double alk = readDouble(input, "Alkalinity Level: ");
+        double gh = readDouble(input, "General Hardness: ");
+        LocalDate date = readDate(input, "Date [YYYY-MM-DD]: ");
 
-        if (ws.getRiskLvl().equals("Normal")) {
+        WaterSample ws = new WaterSample(
+                id, temp, pH, ammonia, nitrite, nitrate, alk, gh, date);
+
+        if (ws.getRiskLvl().equalsIgnoreCase("Normal")) {
             normalList.addLast(ws);
         } else {
             riskQueue.enqueue(ws);
         }
 
         writeAllToFile(normalList, riskQueue);
-        System.out.println("[ ID: " + id + ", Risk Level: " + ws.getRiskLvl() + "]");
-        System.out.println("Sample added.");
-        System.out.println();
+
+        System.out.println("[ ID: " + id + ", Risk Level: " + ws.getRiskLvl() + " ]");
+        System.out.println("Sample added successfully.\n");
     }
 
     // ------------------------ DETERMINE RISK LEVEL ------------------------
@@ -276,9 +274,10 @@ public class WaterSample {
         WaterSample ws = normalList.getFirst();
         while (ws != null) {
             if (ws.getSampleID().equals(key)) {
+                System.out.println("Sample Found: ");
                 for (String line : ws.toCard()) {
-                System.out.println(line);
-}
+                    System.out.println(line);
+                }
 
                 System.out.print("Do you want to edit this sample? [Y/N]: ");
                 String choice = input.nextLine();
@@ -300,9 +299,10 @@ public class WaterSample {
         ws = q.getFirst();
         while (ws != null) {
             if (ws.sampleID.equals(key)) {
+                System.out.println("Sample Found: ");
                 for (String line : ws.toCard()) {
-                System.out.println(line);
-            }
+                    System.out.println(line);
+                }
 
                 System.out.print("Do you want to edit this sample? [Y/N]: ");
                 String choice = input.nextLine();
@@ -431,15 +431,15 @@ public class WaterSample {
         }
 
         return new String[] {
-        "+-----------------------------+",
-        String.format("| %-27s |", "ID: " + sampleID),
-        String.format("| %-27s |", "Date: " + date),
-        String.format("| %-27s |", "Risk: " + riskLvl),
-        "|-----------------------------|",
-        String.format("| %-27s |", "Suggestion:"),
-        String.format("| %-27s |", suggestion),
-        "+-----------------------------+"
-    };
+                "+-----------------------------+",
+                String.format("| %-27s |", "ID: " + sampleID),
+                String.format("| %-27s |", "Date: " + date),
+                String.format("| %-27s |", "Risk: " + riskLvl),
+                "|-----------------------------|",
+                String.format("| %-27s |", "Suggestion:"),
+                String.format("| %-27s |", suggestion),
+                "+-----------------------------+"
+        };
     }
 
     // ------------------------ FILE WRITER ------------------------
@@ -484,6 +484,33 @@ public class WaterSample {
             }
         } catch (IOException e) {
             System.out.println("Error Writing File.");
+        }
+    }
+
+    // ---------------Input Handler for Add Sample---------------
+    private static double readDouble(Scanner input, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            if (input.hasNextDouble()) {
+                double value = input.nextDouble();
+                input.nextLine(); // clear buffer
+                return value;
+            } else {
+                System.out.println("Invalid input. Please enter a number.");
+                input.nextLine(); // discard wrong input
+            }
+        }
+    }
+
+    private static LocalDate readDate(Scanner input, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String text = input.nextLine();
+            try {
+                return LocalDate.parse(text); // YYYY-MM-DD
+            } catch (Exception e) {
+                System.out.println("Invalid date format. Use YYYY-MM-DD.");
+            }
         }
     }
 
