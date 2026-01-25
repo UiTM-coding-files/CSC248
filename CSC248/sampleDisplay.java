@@ -27,9 +27,10 @@ public class sampleDisplay {
             System.out.println("\nOptions: ");
             if(end < samples.size()) System.out.println("1 - Next Page");
             if(page > 0) System.out.println("2 - Previous Page");
-            System.out.println("3 - Sort by Date (Oldest to Newest)");
+            System.out.println("3 - More Options ");
+           /*System.out.println("3 - Sort by Date (Oldest to Newest)");
             System.out.println("4 - Sort by Risk Level (High to Low)");
-            System.out.println("5 - View Statistics");
+            System.out.println("5 - View Statistics");*/
             System.out.println("0 - Exit to Main Menu");
             System.out.print("Enter choice: ");
             try{
@@ -39,10 +40,46 @@ public class sampleDisplay {
             else if(choice == 2 && page > 0) {clearScreen(); page--;}
             else if (choice == 3){
                 clearScreen();
-                SortByDate(samples);
+                do{
+                    start = page * samples_per_page;
+                    end = Math.min(start + samples_per_page, samples.size());
+                    pagesamples = new ArrayList<>(samples.subList(start, end));
+                    printGrid(pagesamples);
+
+                    System.out.println("Page " + (page + 1) + " of " + ((samples.size() - 1) / samples_per_page + 1));
+                    System.out.println("\nMore Options:");
+                    System.out.println("4 - Sort by Date (Oldest to Newest)");
+                    System.out.println("5 - Sort by Risk Level (High to Low)");
+                    System.out.println("6 - Back to Previous Menu");
+                    System.out.print("Enter choice: ");
+                    try{
+                    choice = in.nextInt();
+                    if(choice == 4){
+                        clearScreen();
+                        SortByDate(samples);
+                        page = 0;
+                    }
+                    else if(choice == 5){
+                        clearScreen();
+                        SortByRisk(samples);
+                        page = 0;
+                    }
+                    else if (choice != 6){
+                        System.out.println("Invalid choice. Please try again.");
+                        System.out.println("Press Enter to continue...");
+                        in.nextLine();
+                        in.nextLine();
+                        clearScreen();
+                    }
+                    }catch(Exception e){
+                        System.out.println("Invalid input. Please enter a number corresponding to the options.");
+                        in.nextLine(); 
+                    }
+                }while(choice != 6);
+                clearScreen();
                 page = 0;
             }
-            else if (choice == 4){
+            /*else if (choice == 4){
                 clearScreen();
                 SortByRisk(samples);
                 page = 0;
@@ -53,12 +90,14 @@ public class sampleDisplay {
                 System.out.println("\nPress Enter to return...");
                 in.nextLine();
                 in.nextLine(); 
-            }
+            }*/
             else if (choice != 0){
                 System.out.println("Invalid choice. Please try again.");
                 System.out.println("Press Enter to continue...");
                 in.nextLine();
-                in.nextLine();}
+                in.nextLine();
+                clearScreen();
+            }
         }catch(Exception e){
             System.out.println("Invalid input. Please enter a number corresponding to the options.");
             in.nextLine(); }
