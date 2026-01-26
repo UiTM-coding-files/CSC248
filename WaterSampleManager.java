@@ -19,7 +19,7 @@ public class WaterSampleManager {
                     +------------------------+
                     | 1. Add new sample      |
                     +------------------------+
-                    | 2. Search sample(s)    |
+                    | 2. Search and Edit     |
                     +------------------------+
                     | 3. Remove samples(s)   |
                     +------------------------+
