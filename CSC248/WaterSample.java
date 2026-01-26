@@ -141,7 +141,7 @@ public class WaterSample {
             String sampleMenu = """
                     +------------------------+
                     | 1. Add new sample      |
-                    | 2. Search sample(s)    |
+                    | 2. Search and Edit     |
                     | 3. Remove samples(s)   |
                     | 4. Back to Main Menu   |
                     +------------------------+
@@ -286,9 +286,15 @@ public class WaterSample {
                 if (choice.equalsIgnoreCase("Y")) {
                     editSample(ws, input);
                     writeAllToFile(normalList, riskQueue);
-                    System.out.println("Sample Updated.\n");
+                    sampleDisplay.clearScreen();
+                    System.out.println(" ");
+                    System.out.println("Sample Updated.");
+                    for (String line : ws.toCard()) {
+                    System.out.println(line);
+                    }
+                    System.out.println(" ");
                 } else {
-                    System.out.println("Edit cancelled.\n");
+                    System.out.println("Edit cancelled.");
                 }
                 return; // go back to menu
             }
@@ -312,9 +318,14 @@ public class WaterSample {
                     editSample(ws, input);
                     writeAllToFile(normalList, riskQueue);
                     sampleDisplay.clearScreen();
-                    System.out.println("Sample Updated.\n");
+                    System.out.println(" ");
+                    System.out.println("Sample Updated.");
+                    for (String line : ws.toCard()) {
+                    System.out.println(line);
+                    }
+                    System.out.println(" ");
                 } else {
-                    System.out.println("Edit cancelled.\n");
+                    System.out.println("Edit cancelled.");
                 }
                 return; // go back to menu
             }
@@ -410,19 +421,6 @@ public class WaterSample {
         return false;
     }
 
-    // ------------------------ DISPLAY SAMPLE ------------------------
-    public void displayFullSample() {
-        System.out.println("ID: " + sampleID);
-        System.out.println("Temperature: " + temp);
-        System.out.println("pH Level: " + pHlvl);
-        System.out.println("Ammonia Level: " + ammoniaLvl);
-        System.out.println("Nitrite Level: " + nitriteLvl);
-        System.out.println("Nitrate Level: " + nitrateLvl);
-        System.out.println("Alkalinity Level: " + alkalinityLvl);
-        System.out.println("General Hardness: " + generalHardness);
-        System.out.println("Risk Level: " + riskLvl);
-        System.out.println("Date: " + date);
-    }
 
     // ------------------------ TO CARD FORMAT ------------------------
     public String[] toCard() {
@@ -541,17 +539,4 @@ public class WaterSample {
         }
     }
 
-    @Override
-    public String toString() {
-        return sampleID + ","
-                + temp + ","
-                + pHlvl + ","
-                + ammoniaLvl + ","
-                + nitriteLvl + ","
-                + nitrateLvl + ","
-                + alkalinityLvl + ","
-                + generalHardness + ","
-                + riskLvl + ","
-                + date + "," + actionTaken;
-    }
 }
