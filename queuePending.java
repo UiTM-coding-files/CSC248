@@ -1,8 +1,12 @@
+
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class queuePending {
-    //Main menu untuk module Pending Task
+    private static sampleDisplay sampleD = new sampleDisplay();
+
+    // Main menu untuk module Pending Task
     public void queuePending(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
         Scanner in = new Scanner(System.in);
         int opt;
@@ -27,14 +31,17 @@ public class queuePending {
 
             switch (opt) {
                 case 1:
+                    sampleD.clearScreen();
                     pendingList(normalList, riskQueue);
                     break;
 
                 case 2:
+                    sampleD.clearScreen();
                     update(normalList, riskQueue, in);
                     break;
 
                 case 3:
+                    sampleD.clearScreen();
                     suggest(normalList, riskQueue);
                     break;
 
@@ -47,33 +54,61 @@ public class queuePending {
             }
 
         } while (opt != 4);
+        sampleDisplay.clearScreen();
     }
-    //Menu untuk pendingList
-    public void pendingList(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue){
-        System.out.println("Pending Maintenance List (Moderate/High risk, action not taken):\n");
+
+    // Menu untuk pendingList
+    public void pendingList(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
+        
+        //System.out.println("Pending Maintenance List (Moderate/High risk, action not taken):\n");
+        //sampleDisplay.clearScreen();
+        ArrayList<WaterSample> filteredSamples = new ArrayList<>();
 
         SampleLinkedList<WaterSample> list = riskQueue.getList();
         WaterSample ws = list.getFirst();
-        boolean found = false;
+
         while (ws != null) {
-            if ((ws.getRiskLvl().equalsIgnoreCase("Moderate") || ws.getRiskLvl().equalsIgnoreCase("High"))
+            if ((ws.getRiskLvl().equalsIgnoreCase("Moderate") ||
+                    ws.getRiskLvl().equalsIgnoreCase("High"))
                     && !ws.isActionTaken()) {
-                for (String line : ws.toCard()) {
-                    System.out.println(line);
-                }
-                found = true;
+
+                filteredSamples.add(ws);
             }
             ws = list.getNext();
         }
 
-        if (!found) {
+        if (filteredSamples.isEmpty()) {
             System.out.println("No pending maintenance samples found.");
+        } else {
+            sampleDisplay.display(filteredSamples);
         }
-        System.out.println();
     }
 
-    //Menu untuk update samples
-    public void update(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue, Scanner in){
+    /*
+     * SampleLinkedList<WaterSample> list = riskQueue.getList();
+     * WaterSample ws = list.getFirst();
+     * boolean found = false;
+     * while (ws != null) {
+     * if ((ws.getRiskLvl().equalsIgnoreCase("Moderate") ||
+     * ws.getRiskLvl().equalsIgnoreCase("High"))
+     * && !ws.isActionTaken()) {
+     * for (String line : ws.toCard()) {
+     * System.out.println(line);
+     * }
+     * found = true;
+     * }
+     * ws = list.getNext();
+     * }
+     * 
+     * if (!found) {
+     * System.out.println("No pending maintenance samples found.");
+     * }
+     * System.out.println();
+     * }
+     */
+
+    // Menu untuk update samples
+    public void update(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue, Scanner in) {
         System.out.print("Enter Sample ID to mark action taken: ");
         String id = in.nextLine();
 
@@ -112,8 +147,35 @@ public class queuePending {
         System.out.println();
     }
 
-    //Menu untuk AI suggestion
-    public void suggest(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue){
+
+    public void suggest(SampleLinkedList<WaterSample> normalList,TaskQueue<WaterSample> riskQueue) {
+
+    LocalDate cutoff = LocalDate.now().minusDays(2);
+    ArrayList<WaterSample> result = new ArrayList<>();
+    SampleLinkedList<WaterSample>[] lists = new SampleLinkedList[] { riskQueue.getList(), normalList };
+
+    for (SampleLinkedList<WaterSample> l : lists) {
+        WaterSample s = l.getFirst();
+        while (s != null) {
+            if ((s.getDate().isBefore(cutoff) || s.getDate().isEqual(cutoff))
+                    && !s.isActionTaken()) {
+
+                result.add(s);   // ✅ collect only
+            }
+            s = l.getNext();
+        }
+    }
+
+    if (result.isEmpty()) {
+        System.out.println("No suggestions at this time.");
+    } else {
+        sampleDisplay.suggestDisplay(result);
+    }
+}
+
+
+    // Menu untuk AI suggestion
+   /*  public void suggest(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
         System.out.println("Suggestions for samples added 48+ hours ago:");
         LocalDate cutoff = LocalDate.now().minusDays(2);
 
@@ -125,7 +187,8 @@ public class queuePending {
             WaterSample s = l.getFirst();
             while (s != null) {
                 if ((s.getDate().isBefore(cutoff) || s.getDate().isEqual(cutoff)) && !s.isActionTaken()) {
-                    System.out.println("ID: " + s.getSampleID() + " | Risk: " + s.getRiskLvl() + " | Date: " + s.getDate());
+                    System.out.println(
+                            "ID: " + s.getSampleID() + " | Risk: " + s.getRiskLvl() + " | Date: " + s.getDate());
                     if (s.getRiskLvl().equalsIgnoreCase("High")) {
                         System.out.println(" Suggestion: Immediate action required (notify team, retest, treat).\n");
                     } else if (s.getRiskLvl().equalsIgnoreCase("Moderate")) {
@@ -143,5 +206,5 @@ public class queuePending {
             System.out.println("No suggestions at this time.");
         }
         System.out.println();
-    }
+    }*/
 }

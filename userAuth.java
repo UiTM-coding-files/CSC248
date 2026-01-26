@@ -51,6 +51,7 @@ public class userAuth {
                     data[3].equals(password)) {
 
                     System.out.println("Login successful. Welcome, " + username + "!");
+                    System.out.println();
                     return true;
                 }
             }
