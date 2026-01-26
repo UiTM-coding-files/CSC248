@@ -32,6 +32,7 @@ public class userAuth {
 
     /* ================= LOGIN ================= */
     public static boolean login(Scanner in) {
+        System.out.print("Enter Details to Login\n");
         System.out.print("Username: ");
         String username = in.nextLine();
 
@@ -48,7 +49,7 @@ public class userAuth {
                     data[0].equals(username) &&
                     data[2].equals(password)) {
 
-                    System.out.println("Login successful. Welcome, " + username + "!");
+                    System.out.println("\nLogin successful. Welcome, " + username + "!");
                     return true;
                 }
             }
