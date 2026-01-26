@@ -140,7 +140,7 @@ public class queuePending {
         }
 
         if (updated) {
-            WaterSample.writeAllToFile(normalList, riskQueue);
+            WaterSampleManager.writeAllToFile(normalList, riskQueue);
             System.out.println("Sample " + id + " marked as action taken.");
         } else {
             System.out.println("Sample not found.");
