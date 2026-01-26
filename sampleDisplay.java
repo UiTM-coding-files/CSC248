@@ -28,10 +28,8 @@ public class sampleDisplay {
 
             System.out.println("\nOptions: ");
 
-            if (end < samples.size())
-                System.out.println("1 - Next Page");
-            if (page > 0)
-                System.out.println("2 - Previous Page");
+            if (end < samples.size())System.out.println("1 - Next Page");
+            if (page > 0)System.out.println("2 - Previous Page");
             System.out.println("3 - More Options ");
             System.out.println("0 - Exit to Main Menu");
             System.out.print("Enter choice: ");
@@ -44,14 +42,13 @@ public class sampleDisplay {
                 } else if (choice == 2 && page > 0) {
                     clearScreen();
                     page--;
-                }else if (choice == 3) {
+                } else if (choice == 3) {
                     clearScreen();
                     do {
                         start = page * samples_per_page;
                         end = Math.min(start + samples_per_page, samples.size());
                         pagesamples = new ArrayList<>(samples.subList(start, end));
                         printGrid(pagesamples);
-
 
                         System.out.printf("%-60s%80s%n", "More Options:", pageInfo);
                         System.out.println("4 - Sort by Date (Newest to Oldest)");
@@ -69,7 +66,7 @@ public class sampleDisplay {
                                 clearScreen();
                                 SortByRisk(samples);
                                 page = 0;
-                            }else if(choice == 6){
+                            } else if (choice == 6) {
                                 clearScreen();
                                 statistics(samples);
                                 System.out.println("Press Enter to return...");
@@ -77,7 +74,7 @@ public class sampleDisplay {
                                 in.nextLine();
                             }
 
-                             else if (choice != 7) {
+                            else if (choice != 7) {
                                 System.out.println("Invalid choice. Please try again.");
                                 System.out.println("Press Enter to continue...");
                                 in.nextLine();
@@ -92,20 +89,6 @@ public class sampleDisplay {
                     clearScreen();
                     page = 0;
                 }
-                /*
-                 * else if (choice == 4){
-                 * clearScreen();
-                 * SortByRisk(samples);
-                 * page = 0;
-                 * }
-                 * else if (choice == 5){
-                 * clearScreen();
-                 * statistics(samples);
-                 * System.out.println("\nPress Enter to return...");
-                 * in.nextLine();
-                 * in.nextLine();
-                 * }
-                 */
                 else if (choice != 0) {
                     System.out.println("Invalid choice. Please try again.");
                     System.out.println("Press Enter to continue...");
@@ -141,13 +124,10 @@ public class sampleDisplay {
             ArrayList<WaterSample> pagesamples = new ArrayList<>(samples.subList(start, end));
             printGrid(pagesamples);
 
-            System.out.println("Page " + (page + 1) + " of " + ((samples.size() - 1) / samples_per_page + 1));
-
-            System.out.println("\nOptions: ");
-            if (end < samples.size())
-                System.out.println("1 - Next Page");
-            if (page > 0)
-                System.out.println("2 - Previous Page");
+            String pageInfo = "Page " + (page + 1) + " of " + ((samples.size() - 1) / samples_per_page + 1);
+            System.out.printf("%-60s%80s%n", "Options:", pageInfo);
+            if (end < samples.size())System.out.println("1 - Next Page");
+            if (page > 0)System.out.println("2 - Previous Page");
             System.out.println("0 - Exit to Main Menu");
             System.out.print("Enter choice: ");
             try {
@@ -160,12 +140,10 @@ public class sampleDisplay {
                     clearScreen();
                     page--;
                 } else if (choice != 0) {
-                    /*
-                     * System.out.println("Invalid choice. Please try again.");
-                     * System.out.println("Press Enter to continue...");
-                     * in.nextLine();
-                     * in.nextLine();
-                     */
+                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Press Enter to continue...");
+                    in.nextLine();
+                    in.nextLine();
                 }
             } catch (Exception e) {
                 clearScreen();
@@ -194,12 +172,10 @@ public class sampleDisplay {
             ArrayList<WaterSample> pagesamples = new ArrayList<>(result.subList(start, end));
             printGridsuggest(pagesamples);
 
-            System.out.println("Page " + (page + 1) + " of " + ((result.size() - 1) / samples_per_page + 1));
-            System.out.println("\nOptions: ");
-            if (end < result.size())
-                System.out.println("1 - Next Page");
-            if (page > 0)
-                System.out.println("2 - Previous Page");
+            String pageInfo = "Page " + (page + 1) + " of " + ((result.size() - 1) / samples_per_page + 1);
+            System.out.printf("%-60s%80s%n", "Options:", pageInfo);
+            if (end < result.size())System.out.println("1 - Next Page");
+            if (page > 0)System.out.println("2 - Previous Page");
             System.out.println("0 - Exit to Main Menu");
             System.out.print("Enter choice: ");
             try {
@@ -212,12 +188,11 @@ public class sampleDisplay {
                     clearScreen();
                     page--;
                 } else if (choice != 0) {
-                    /*
-                     * System.out.println("Invalid choice. Please try again.");
-                     * System.out.println("Press Enter to continue...");
-                     * in.nextLine();
-                     * in.nextLine();
-                     */
+                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println("Press Enter to continue...");
+                    in.nextLine();
+                     in.nextLine();
+                     
                 }
             } catch (Exception e) {
                 clearScreen();
@@ -270,13 +245,11 @@ public class sampleDisplay {
             WaterSample key = samples.get(j);
             int i = j - 1;
 
-            while (i >= 0 && samples.get(i).getDate().compareTo(key.getDate()) > 0) {
-            while (i >= 0 && samples.get(i).getDate().compareTo(key.getDate()) < 0) {
-                samples.set(i + 1, samples.get(i));
-                i--;
-            }
-            samples.set(i + 1, key);
-            }
+                while (i >= 0 && samples.get(i).getDate().compareTo(key.getDate()) < 0) {
+                    samples.set(i + 1, samples.get(i));
+                    i--;
+                }
+                samples.set(i + 1, key);
         }
     }
 
