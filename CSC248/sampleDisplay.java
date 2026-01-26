@@ -48,7 +48,7 @@ public class sampleDisplay {
 
                     System.out.println("Page " + (page + 1) + " of " + ((samples.size() - 1) / samples_per_page + 1));
                     System.out.println("\nMore Options:");
-                    System.out.println("4 - Sort by Date (Oldest to Newest)");
+                    System.out.println("4 - Sort by Date (Newest to Oldest)");
                     System.out.println("5 - Sort by Risk Level (High to Low)");
                     System.out.println("6 - Back to Previous Menu");
                     System.out.print("Enter choice: ");
@@ -240,7 +240,7 @@ public class sampleDisplay {
         WaterSample key = samples.get(j);
         int i = j - 1;
 
-        while (i >= 0 && samples.get(i).getDate().compareTo(key.getDate()) > 0) {
+        while (i >= 0 && samples.get(i).getDate().compareTo(key.getDate()) < 0) {
             samples.set(i + 1, samples.get(i));
             i--;
         }
