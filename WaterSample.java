@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.time.LocalDate; // for sorting only
 import java.util.ArrayList;
@@ -287,9 +286,11 @@ public class WaterSample {
                 if (choice.equalsIgnoreCase("Y")) {
                     editSample(ws, input);
                     writeAllToFile(normalList, riskQueue);
-                    System.out.println("Sample Updated.\n");
+                    sampleDisplay.clearScreen();
+                    System.out.println("Sample Updated.");
                 } else {
-                    System.out.println("Edit cancelled.\n");
+                    sampleDisplay.clearScreen();
+                    System.out.println("Edit cancelled.");
                 }
                 return; // go back to menu
             }
@@ -313,9 +314,10 @@ public class WaterSample {
                     editSample(ws, input);
                     writeAllToFile(normalList, riskQueue);
                     sampleDisplay.clearScreen();
-                    System.out.println("Sample Updated.\n");
+                    System.out.println("Sample Updated.");
                 } else {
-                    System.out.println("Edit cancelled.\n");
+                    sampleDisplay.clearScreen();
+                    System.out.println("Edit cancelled.");
                 }
                 return; // go back to menu
             }

@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class sampleDisplay {
-    static final int sample_per_row = 4;
+    static final int sample_per_row = 5;
     static final int row_per_page = 2;
     static final int samples_per_page = sample_per_row * row_per_page;
     static final int width = 30;
@@ -23,19 +23,26 @@ public class sampleDisplay {
             ArrayList<WaterSample> pagesamples = new ArrayList<>(samples.subList(start, end));
             printGrid(pagesamples);
 
-            System.out.println("Page " + (page + 1) + " of " + ((samples.size() - 1) / samples_per_page + 1));
+            String pageInfo = "Page " + (page + 1) + " of " + ((samples.size() - 1) / samples_per_page + 1);
+            System.out.printf("%-60s%80s%n", "Options:", pageInfo);
 
+<<<<<<< HEAD
             System.out.println("\nOptions: ");
+=======
+>>>>>>> 542945e95be756ce824f8d1fbaa23226ac51d600
             if (end < samples.size())
                 System.out.println("1 - Next Page");
             if (page > 0)
                 System.out.println("2 - Previous Page");
             System.out.println("3 - More Options ");
+<<<<<<< HEAD
             /*
              * System.out.println("3 - Sort by Date (Oldest to Newest)");
              * System.out.println("4 - Sort by Risk Level (High to Low)");
              * System.out.println("5 - View Statistics");
              */
+=======
+>>>>>>> 542945e95be756ce824f8d1fbaa23226ac51d600
             System.out.println("0 - Exit to Main Menu");
             System.out.print("Enter choice: ");
             try {
@@ -58,8 +65,13 @@ public class sampleDisplay {
                         System.out
                                 .println("Page " + (page + 1) + " of " + ((samples.size() - 1) / samples_per_page + 1));
                         System.out.println("\nMore Options:");
+<<<<<<< HEAD
                         System.out.println("4 - Sort by Date (Oldest to Newest)");
                         System.out.println("5 - Sort by Risk Level (High to Low)");
+=======
+                        System.out.println("4 - Sort by Date (Newest to Oldest)");
+                        System.out.println("5 - Sort by Risk Level (High to Normal)");
+>>>>>>> 542945e95be756ce824f8d1fbaa23226ac51d600
                         System.out.println("6 - Back to Previous Menu");
                         System.out.print("Enter choice: ");
                         try {
@@ -87,6 +99,7 @@ public class sampleDisplay {
                     clearScreen();
                     page = 0;
                 }
+<<<<<<< HEAD
                 /*
                  * else if (choice == 4){
                  * clearScreen();
@@ -101,6 +114,9 @@ public class sampleDisplay {
                  * in.nextLine();
                  * }
                  */
+=======
+
+>>>>>>> 542945e95be756ce824f8d1fbaa23226ac51d600
                 else if (choice != 0) {
                     System.out.println("Invalid choice. Please try again.");
                     System.out.println("Press Enter to continue...");
@@ -265,7 +281,11 @@ public class sampleDisplay {
             WaterSample key = samples.get(j);
             int i = j - 1;
 
+<<<<<<< HEAD
             while (i >= 0 && samples.get(i).getDate().compareTo(key.getDate()) > 0) {
+=======
+            while (i >= 0 && samples.get(i).getDate().compareTo(key.getDate()) < 0) {
+>>>>>>> 542945e95be756ce824f8d1fbaa23226ac51d600
                 samples.set(i + 1, samples.get(i));
                 i--;
             }
