@@ -110,6 +110,7 @@ public class AquaTrackMain {
 
                         // ---------- CALL WATER SAMPLE MENU ----------
                         WaterSample.wSample(normalList, riskQueue);
+                        
                     } else if (opt == 2) {
                         sampleDisplay.clearScreen();
 
@@ -167,6 +168,7 @@ public class AquaTrackMain {
 
                         queuePending qp = new queuePending();
                         qp.queuePending(normalList, riskQueue);
+
                     } else if (opt == 0) {
                         sampleDisplay.clearScreen();
                         System.out.println("Logged Out Successfully");
