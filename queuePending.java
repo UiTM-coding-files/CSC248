@@ -59,9 +59,10 @@ public class queuePending {
 
     // Menu untuk pendingList
     public void pendingList(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
-        
-        //System.out.println("Pending Maintenance List (Moderate/High risk, action not taken):\n");
-        //sampleDisplay.clearScreen();
+
+        // System.out.println("Pending Maintenance List (Moderate/High risk, action not
+        // taken):\n");
+        // sampleDisplay.clearScreen();
         ArrayList<WaterSample> filteredSamples = new ArrayList<>();
 
         SampleLinkedList<WaterSample> list = riskQueue.getList();
@@ -147,64 +148,28 @@ public class queuePending {
         System.out.println();
     }
 
+    public void suggest(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
 
-    public void suggest(SampleLinkedList<WaterSample> normalList,TaskQueue<WaterSample> riskQueue) {
-
-    LocalDate cutoff = LocalDate.now().minusDays(2);
-    ArrayList<WaterSample> result = new ArrayList<>();
-    SampleLinkedList<WaterSample>[] lists = new SampleLinkedList[] { riskQueue.getList(), normalList };
-
-    for (SampleLinkedList<WaterSample> l : lists) {
-        WaterSample s = l.getFirst();
-        while (s != null) {
-            if ((s.getDate().isBefore(cutoff) || s.getDate().isEqual(cutoff))
-                    && !s.isActionTaken()) {
-
-                result.add(s);   // ✅ collect only
-            }
-            s = l.getNext();
-        }
-    }
-
-    if (result.isEmpty()) {
-        System.out.println("No suggestions at this time.");
-    } else {
-        sampleDisplay.suggestDisplay(result);
-    }
-}
-
-
-    // Menu untuk AI suggestion
-   /*  public void suggest(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
-        System.out.println("Suggestions for samples added 48+ hours ago:");
         LocalDate cutoff = LocalDate.now().minusDays(2);
+        ArrayList<WaterSample> result = new ArrayList<>();
+        SampleLinkedList<WaterSample>[] lists = new SampleLinkedList[] { riskQueue.getList(), normalList };
 
-        // check both lists
-        SampleLinkedList<WaterSample> lists[] = new SampleLinkedList[] { riskQueue.getList(), normalList };
-
-        boolean found = false;
         for (SampleLinkedList<WaterSample> l : lists) {
             WaterSample s = l.getFirst();
             while (s != null) {
-                if ((s.getDate().isBefore(cutoff) || s.getDate().isEqual(cutoff)) && !s.isActionTaken()) {
-                    System.out.println(
-                            "ID: " + s.getSampleID() + " | Risk: " + s.getRiskLvl() + " | Date: " + s.getDate());
-                    if (s.getRiskLvl().equalsIgnoreCase("High")) {
-                        System.out.println(" Suggestion: Immediate action required (notify team, retest, treat).\n");
-                    } else if (s.getRiskLvl().equalsIgnoreCase("Moderate")) {
-                        System.out.println(" Suggestion: Re-test within 24 hours / monitor closely.\n");
-                    } else {
-                        System.out.println(" Suggestion: No urgent action but monitor.\n");
-                    }
-                    found = true;
+                if ((s.getDate().isBefore(cutoff) || s.getDate().isEqual(cutoff))
+                        && !s.isActionTaken()) {
+
+                    result.add(s); 
                 }
                 s = l.getNext();
             }
         }
 
-        if (!found) {
+        if (result.isEmpty()) {
             System.out.println("No suggestions at this time.");
+        } else {
+            sampleDisplay.suggestDisplay(result);
         }
-        System.out.println();
-    }*/
+    }
 }

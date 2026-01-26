@@ -2,6 +2,7 @@
 import java.io.*;
 import java.time.LocalDate; // for sorting only
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class WaterSample {
@@ -426,47 +427,105 @@ public class WaterSample {
 
     // ------------------------ TO CARD FORMAT ------------------------
     public String[] toCard() {
-        return new String[]{
-            "+---------------------------+",
-            String.format("| %-25s |", "ID: " + sampleID),
-            "+---------------------------+",
-            String.format("| %-25s |", "Date: " + date),
-            String.format("| %-25s |", String.format("Temp: %.1f °C", temp)),
-            String.format("| %-25s |", String.format("pH: %.2f", pHlvl)),
-            String.format("| %-25s |", String.format("Ammonia: %.2f", ammoniaLvl)),
-            String.format("| %-25s |", String.format("Nitrite: %.2f", nitriteLvl)),
-            String.format("| %-25s |", String.format("Nitrate: %.2f", nitrateLvl)),
-            String.format("| %-25s |", String.format("Alkalinity: %.2f", alkalinityLvl)),
-            String.format("| %-25s |", String.format("Hardness: %.2f", generalHardness)),
-            "|---------------------------|",
-            String.format("| %-25s |", "Risk Level: " + riskLvl),
-            "+---------------------------+"
+        return new String[] {
+                "+---------------------------+",
+                String.format("| %-25s |", "ID: " + sampleID),
+                "+---------------------------+",
+                String.format("| %-25s |", "Date: " + date),
+                String.format("| %-25s |", String.format("Temp: %.1f °C", temp)),
+                String.format("| %-25s |", String.format("pH: %.2f", pHlvl)),
+                String.format("| %-25s |", String.format("Ammonia: %.2f", ammoniaLvl)),
+                String.format("| %-25s |", String.format("Nitrite: %.2f", nitriteLvl)),
+                String.format("| %-25s |", String.format("Nitrate: %.2f", nitrateLvl)),
+                String.format("| %-25s |", String.format("Alkalinity: %.2f", alkalinityLvl)),
+                String.format("| %-25s |", String.format("Hardness: %.2f", generalHardness)),
+                "|---------------------------|",
+                String.format("| %-25s |", "Risk Level: " + riskLvl),
+                "+---------------------------+"
         };
+    }
+
+    public static String generateAISuggestion(double temp, double pH, double ammonia,
+            double nitrite, double nitrate,
+            double alkalinity, double hardness) {
+
+        StringBuilder suggestion = new StringBuilder();
+
+        // Temperature
+        if (temp < 22)
+            suggestion.append("Increase water temperature; ");
+        else if (temp > 28)
+            suggestion.append("Reduce water temperature; ");
+
+        // pH
+        if (pH < 6.8)
+            suggestion.append("Raise pH level; ");
+        else if (pH > 7.5)
+            suggestion.append("Lower pH level; ");
+
+        // Ammonia
+        if (ammonia > 0.02)
+            suggestion.append("Partial water change to reduce ammonia; ");
+
+        // Nitrite
+        if (nitrite > 0.02)
+            suggestion.append("Check filtration, reduce nitrite; ");
+
+        // Nitrate
+        if (nitrate > 40)
+            suggestion.append("Perform water change to reduce nitrate; ");
+
+        // Alkalinity
+        if (alkalinity < 70)
+            suggestion.append("Add buffer to increase alkalinity; ");
+        else if (alkalinity > 150)
+            suggestion.append("Dilute water to lower alkalinity; ");
+
+        // Hardness
+        if (hardness < 70)
+            suggestion.append("Increase minerals to raise hardness; ");
+        else if (hardness > 200)
+            suggestion.append("Dilute water to reduce hardness; ");
+
+        if (suggestion.length() == 0)
+            return "Water parameters normal; monitor regularly.";
+
+        return suggestion.toString();
     }
 
     // ------------------------ TO SUGGESTION CARD FORMAT ------------------------
     public String[] SuggestCard() {
+        String suggestion = generateAISuggestion(alkalinityLvl, alkalinityLvl, alkalinityLvl, alkalinityLvl, alkalinityLvl, alkalinityLvl, alkalinityLvl);
 
-        String suggestion;
-
-        if (riskLvl.equalsIgnoreCase("High")) {
-            suggestion = "Immediate action required";
-        } else if (riskLvl.equalsIgnoreCase("Moderate")) {
-            suggestion = "Re-test within 24 hours";
-        } else {
-            suggestion = "Monitor (no urgent action)";
+        ArrayList<String> suggestionLines = new ArrayList<>();
+        int maxLineLength = 27; // matches your card width minus borders
+        while (!suggestion.isEmpty()) {
+            if (suggestion.length() <= maxLineLength) {
+                suggestionLines.add(suggestion);
+                break;
+            } else {
+                int splitAt = suggestion.lastIndexOf(' ', maxLineLength);
+                if (splitAt == -1)
+                    splitAt = maxLineLength;
+                suggestionLines.add(suggestion.substring(0, splitAt));
+                suggestion = suggestion.substring(splitAt).trim();
+            }
         }
 
-        return new String[]{
-            "+-----------------------------+",
-            String.format("| %-27s |", "ID: " + sampleID),
-            String.format("| %-27s |", "Date: " + date),
-            String.format("| %-27s |", "Risk: " + riskLvl),
-            "|-----------------------------|",
-            String.format("| %-27s |", "Suggestion:"),
-            String.format("| %-27s |", suggestion),
-            "+-----------------------------+"
-        };
+        List<String> card = new ArrayList<>();
+        card.add("+-----------------------------+");
+        card.add(String.format("| %-27s |", "ID: " + sampleID));
+        card.add(String.format("| %-27s |", "Date: " + date));
+        card.add(String.format("| %-27s |", "Risk: " + riskLvl));
+        card.add("|-----------------------------|");
+        card.add(String.format("| %-27s |", "AI Suggestion:"));
+        for (String line : suggestionLines) {
+            card.add(String.format("| %-27s |", line));
+        }
+        card.add("+-----------------------------+");
+
+        return card.toArray(new String[0]);
+
     }
 
     // ------------------------ FILE WRITER ------------------------
