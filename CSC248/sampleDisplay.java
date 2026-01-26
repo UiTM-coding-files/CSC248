@@ -49,7 +49,7 @@ public class sampleDisplay {
                     System.out.println("Page " + (page + 1) + " of " + ((samples.size() - 1) / samples_per_page + 1));
                     System.out.println("\nMore Options:");
                     System.out.println("4 - Sort by Date (Newest to Oldest)");
-                    System.out.println("5 - Sort by Risk Level (High to Low)");
+                    System.out.println("5 - Sort by Risk Level (High to Normal)");
                     System.out.println("6 - Back to Previous Menu");
                     System.out.print("Enter choice: ");
                     try{
@@ -334,3 +334,4 @@ static void clearScreen() {
 }
 
     }
+
