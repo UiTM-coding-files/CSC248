@@ -15,17 +15,15 @@ public class userAuth {
             return;
         }
 
-        System.out.print("Enter phone number: ");
-        String phone = in.nextLine();
+        System.out.print("Enter email: ");
+        String email = in.nextLine();
 
-        System.out.print("Enter age: ");
-        String age = in.nextLine();
 
         System.out.print("Enter password: ");
         String password = in.nextLine();
 
         try (PrintWriter pw = new PrintWriter(new FileWriter(FILE_NAME, true))) {
-            pw.println(username + "," + phone + "," + age + "," + password);
+            pw.println(username + "," + email + "," + password);
             System.out.println("Account created successfully.");
         } catch (IOException e) {
             System.out.println("Error writing to user.txt");
@@ -46,12 +44,11 @@ public class userAuth {
             while ((line = br.readLine()) != null) {
                 String[] data = line.split(",");
 
-                if (data.length == 4 &&
+                if (data.length == 3 &&
                     data[0].equals(username) &&
-                    data[3].equals(password)) {
+                    data[2].equals(password)) {
 
                     System.out.println("Login successful. Welcome, " + username + "!");
-                    System.out.println();
                     return true;
                 }
             }
