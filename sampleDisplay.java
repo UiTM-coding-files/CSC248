@@ -1,10 +1,10 @@
 import java.util.*;
 
 public class sampleDisplay {
-    static final int sample_per_row = 5;
-    static final int row_per_page = 2;
-    static final int samples_per_page = sample_per_row * row_per_page;
-    static final int width = 30;
+    private static final int sample_per_row = 5;
+    private static final int row_per_page = 2;
+    private static final int samples_per_page = sample_per_row * row_per_page;
+    private static final int width = 30;
 
     public static void displayPaging(ArrayList<WaterSample> samples) {
         Scanner in = new Scanner(System.in);
