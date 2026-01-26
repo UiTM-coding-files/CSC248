@@ -50,7 +50,7 @@ public class AquaTrackMain {
             do {
                 System.out.println("""
                     +------------------------+
-                    | 1. Add sample          |
+                    | 1. Manage sample       |
                     | 2. View sample(s)      |
                     | 3. Pending Task        |
                     | 0. Logout              |
