@@ -1,3 +1,4 @@
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,13 +13,13 @@ public class AquaTrackMain {
         Scanner in = new Scanner(System.in);
         sampleDisplay sampleDisplay = new sampleDisplay();
 
+        // ----------------------------------- APP LOOP -----------------------------------   
         while (true) {
-
             SampleLinkedList<WaterSample> normalList = new SampleLinkedList<>();
             TaskQueue<WaterSample> riskQueue = new TaskQueue<>();
             int opt = -1;
 
-            // ================= LOGIN =================
+            // ----------------------------------- USER SIGN UP/LOGIN -----------------------------------   
             sampleDisplay.clearScreen();
             System.out.println("+-------------------------+");
             System.out.println("|   Welcome to AquaTrack! |");
@@ -31,68 +32,156 @@ public class AquaTrackMain {
                 String hasAccount = in.nextLine().toLowerCase();
 
                 if (hasAccount.equals("y")) {
+                    sampleDisplay.clearScreen();
                     if (userAuth.login(in)) {
-                        sampleDisplay.clearScreen();
-                        loggedIn = true;
+                        loggedIn = true; // Exit loop on successful login
                     }
                 } else if (hasAccount.equals("n")) {
                     userAuth.signUp(in);
+                    System.out.println();
                 } else if (hasAccount.equals("e")) {
+                    System.out.println("Exiting AquaTrack. Goodbye!");
                     in.close();
-                    return;
+                    return; // exit program
+                } else {
+                    System.out.println("Invalid input. Please enter 'y' or 'n'.");
                 }
             }
 
-            // ================= LOAD FILE =================
-            SampleDataLoader.loadSamples(normalList, riskQueue);
+            // ----------------------------------- READ FILE & SEPARATE RECORDS -----------------------------------
+            try (BufferedReader br = new BufferedReader(new FileReader("Samples.txt"))) {
+                String line;
 
-            // ================= MENU =================
+                while ((line = br.readLine()) != null) {
+                    String[] data = line.split(",");
+
+                    String id = data[0];
+                    double temp = Double.parseDouble(data[1]);
+                    double pH = Double.parseDouble(data[2]);
+                    double ammonia = Double.parseDouble(data[3]);
+                    double nitrite = Double.parseDouble(data[4]);
+                    double nitrate = Double.parseDouble(data[5]);
+                    double alkalinity = Double.parseDouble(data[6]);
+                    double gh = Double.parseDouble(data[7]);
+                    LocalDate date = LocalDate.parse(data[9]); // risk is auto-calculated
+                    boolean actionTaken = false;
+                    if (data.length > 10) {
+                        try {
+                            actionTaken = Boolean.parseBoolean(data[10]);
+                        } catch (Exception ignored) {
+                        }
+                    }
+
+                    WaterSample ws;
+                    if (data.length > 10) {
+                        ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date, actionTaken);
+                    } else {
+                        ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date);
+                    }
+
+                    if (ws.getRiskLvl().equals("Normal")) {
+                        normalList.addLast(ws);
+                    } else {
+                        riskQueue.enqueue(ws);
+                    }
+                }
+
+            } catch (IOException e) {
+                System.out.println("Error reading Samples.txt");
+            }
+
+            // ----------------------------------- START MENU -----------------------------------
             do {
-                System.out.println("""
+                String sampleMenu = """
                     +------------------------+
                     | 1. Add sample          |
                     | 2. View sample(s)      |
                     | 3. Pending Task        |
                     | 0. Logout              |
                     +------------------------+
-                    """);
+                    """;
+                System.out.println(sampleMenu);
                 System.out.print("Choose Option: ");
 
                 try {
                     opt = in.nextInt();
-                    in.nextLine();
-
                     if (opt == 1) {
                         sampleDisplay.clearScreen();
-                        WaterSample.wSample(normalList, riskQueue);
 
+                        // ---------- CALL WATER SAMPLE MENU ----------
+                        WaterSample.wSample(normalList, riskQueue);
                     } else if (opt == 2) {
                         sampleDisplay.clearScreen();
-                        ArrayList<WaterSample> samples =
-                                SampleDataLoader.loadFromFile("Samples.txt");
-                        sampleDisplay.displayPaging(samples);
+
+                        ArrayList<WaterSample> Samples = SampleDataLoader.loadFromFile("Samples.txt");
+
+                        sampleDisplay.displayPaging(Samples);
 
                     } else if (opt == 3) {
                         sampleDisplay.clearScreen();
+                        // load samples from file into lists before showing pending menu
                         normalList.clear();
+                        // clear riskQueue by creating new one
                         riskQueue = new TaskQueue<>();
-                        SampleDataLoader.loadSamples(normalList, riskQueue);
+
+                        try (BufferedReader br = new BufferedReader(new FileReader("Samples.txt"))) {
+                            String line;
+
+                            while ((line = br.readLine()) != null) {
+                                String[] data = line.split(",");
+
+                                String id = data[0];
+                                double temp = Double.parseDouble(data[1]);
+                                double pH = Double.parseDouble(data[2]);
+                                double ammonia = Double.parseDouble(data[3]);
+                                double nitrite = Double.parseDouble(data[4]);
+                                double nitrate = Double.parseDouble(data[5]);
+                                double alkalinity = Double.parseDouble(data[6]);
+                                double gh = Double.parseDouble(data[7]);
+                                java.time.LocalDate date = java.time.LocalDate.parse(data[9]);
+                                boolean actionTaken = false;
+                                if (data.length > 10) {
+                                    try {
+                                        actionTaken = Boolean.parseBoolean(data[10]);
+                                    } catch (Exception ignored) {
+                                    }
+                                }
+
+                                WaterSample ws;
+                                if (data.length > 10) {
+                                    ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date, actionTaken);
+                                } else {
+                                    ws = new WaterSample(id, temp, pH, ammonia, nitrite, nitrate, alkalinity, gh, date);
+                                }
+
+                                if (ws.getRiskLvl().equals("Normal")) {
+                                    normalList.addLast(ws);
+                                } else {
+                                    riskQueue.enqueue(ws);
+                                }
+                            }
+
+                        } catch (IOException e) {
+                            System.out.println("Error reading Samples.txt");
+                        }
 
                         queuePending qp = new queuePending();
                         qp.queuePending(normalList, riskQueue);
-
                     } else if (opt == 0) {
                         sampleDisplay.clearScreen();
                         System.out.println("Logged Out Successfully");
-                        break;
+                        in.nextLine();
+                        break; // back to login menu
+                    } else {
+                        System.out.print("Invalid option. Please try again: ");
                     }
 
                 } catch (Exception e) {
+                    System.out.print("Invalid input. Please try again: ");
                     in.nextLine();
                 }
 
             } while (opt != 0);
         }
     }
-
 }
