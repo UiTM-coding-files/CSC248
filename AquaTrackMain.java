@@ -20,9 +20,9 @@ public class AquaTrackMain {
 
             // ================= LOGIN =================
             sampleDisplay.clearScreen();
-            System.out.println("+-------------------------+");
-            System.out.println("|   Welcome to AquaTrack! |");
-            System.out.println("+-------------------------+");
+            System.out.println("+---------------------------------------+");
+            System.out.println("|         Welcome to AquaTrack!         |");
+            System.out.println("+---------------------------------------+");
 
             boolean loggedIn = false;
 
@@ -64,7 +64,7 @@ public class AquaTrackMain {
 
                     if (opt == 1) {
                         sampleDisplay.clearScreen();
-                        WaterSample.wSample(normalList, riskQueue);
+                        WaterSampleManager.manageSamples(normalList, riskQueue);
 
                     } else if (opt == 2) {
                         sampleDisplay.clearScreen();
