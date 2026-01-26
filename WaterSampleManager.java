@@ -146,7 +146,11 @@ public class WaterSampleManager {
             editSample(ws, input);
             writeAllToFile(normalList, riskQueue);
             sampleDisplay.clearScreen();
+            System.out.println(" ");
             System.out.println("Sample Updated.");
+            for (String line : ws.toCard()) {
+            System.out.println(line);}
+            System.out.println(" ");
         } else {
             sampleDisplay.clearScreen();
             System.out.println("Edit cancelled.");
