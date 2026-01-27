@@ -119,6 +119,7 @@ public class AquaTrackMain {
                 double nitrate = Double.parseDouble(data[5]);
                 double alkalinity = Double.parseDouble(data[6]);
                 double gh = Double.parseDouble(data[7]);
+                String riskLevel = data[8];
                 LocalDate date = LocalDate.parse(data[9]);
 
                 boolean actionTaken = false;
