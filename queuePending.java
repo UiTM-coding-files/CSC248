@@ -1,5 +1,4 @@
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -24,6 +23,7 @@ public class queuePending {
                 """;
 
         do {
+            sampleD.clearScreen();
             System.out.print(queueMenu);
             System.out.print("Choose option: ");
             opt = in.nextInt();
@@ -59,20 +59,15 @@ public class queuePending {
 
     // Menu untuk pendingList
     public void pendingList(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
-
-        // System.out.println("Pending Maintenance List (Moderate/High risk, action not
-        // taken):\n");
-        // sampleDisplay.clearScreen();
         ArrayList<WaterSample> filteredSamples = new ArrayList<>();
 
         SampleLinkedList<WaterSample> list = riskQueue.getList();
         WaterSample ws = list.getFirst();
 
         while (ws != null) {
-            if ((ws.getRiskLvl().equalsIgnoreCase("Moderate") ||
-                    ws.getRiskLvl().equalsIgnoreCase("High"))
-                    && !ws.isActionTaken()) {
-
+            // Show ALL risk samples (both pending and completed)
+            if (ws.getRiskLvl().equalsIgnoreCase("Moderate") ||
+                    ws.getRiskLvl().equalsIgnoreCase("High")) {
                 filteredSamples.add(ws);
             }
             ws = list.getNext();
@@ -81,32 +76,37 @@ public class queuePending {
         if (filteredSamples.isEmpty()) {
             System.out.println("No pending maintenance samples found.");
         } else {
-            sampleDisplay.display(filteredSamples);
+            // Display with status
+            System.out.println("Pending Maintenance List:\n");
+            System.out.println("=".repeat(70));
+            System.out.printf("%-10s %-12s %-15s %-20s\n", "Sample ID", "Date", "Risk Level", "Status");
+            System.out.println("=".repeat(70));
+
+            for (WaterSample sample : filteredSamples) {
+                String status = sample.isActionTaken() ? "✓ Action Taken" : "⚠ Needs Action";
+                System.out.printf("%-10s %-12s %-15s %-20s\n",
+                        sample.getSampleID(),
+                        sample.getDate(),
+                        sample.getRiskLvl(),
+                        status);
+            }
+            System.out.println("=".repeat(70));
+
+            // Count statistics
+            int total = filteredSamples.size();
+            int completed = 0;
+            for (WaterSample sample : filteredSamples) {
+                if (sample.isActionTaken())
+                    completed++;
+            }
+            int pending = total - completed;
+
+            System.out.println("\nSummary: " + total + " total, " + pending + " pending, " + completed + " completed");
+            System.out.println("\nPress Enter to continue...");
+            Scanner temp = new Scanner(System.in);
+            temp.nextLine();
         }
     }
-
-    /*
-     * SampleLinkedList<WaterSample> list = riskQueue.getList();
-     * WaterSample ws = list.getFirst();
-     * boolean found = false;
-     * while (ws != null) {
-     * if ((ws.getRiskLvl().equalsIgnoreCase("Moderate") ||
-     * ws.getRiskLvl().equalsIgnoreCase("High"))
-     * && !ws.isActionTaken()) {
-     * for (String line : ws.toCard()) {
-     * System.out.println(line);
-     * }
-     * found = true;
-     * }
-     * ws = list.getNext();
-     * }
-     * 
-     * if (!found) {
-     * System.out.println("No pending maintenance samples found.");
-     * }
-     * System.out.println();
-     * }
-     */
 
     // Menu untuk update samples
     public void update(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue, Scanner in) {
@@ -149,18 +149,14 @@ public class queuePending {
     }
 
     public void suggest(SampleLinkedList<WaterSample> normalList, TaskQueue<WaterSample> riskQueue) {
-
-        LocalDate cutoff = LocalDate.now().minusDays(2);
         ArrayList<WaterSample> result = new ArrayList<>();
         SampleLinkedList<WaterSample>[] lists = new SampleLinkedList[] { riskQueue.getList(), normalList };
 
         for (SampleLinkedList<WaterSample> l : lists) {
             WaterSample s = l.getFirst();
             while (s != null) {
-                if ((s.getDate().isBefore(cutoff) || s.getDate().isEqual(cutoff))
-                        && !s.isActionTaken()) {
-
-                    result.add(s); 
+                if (!s.isActionTaken()) { // <-- Only add if action NOT taken
+                    result.add(s);
                 }
                 s = l.getNext();
             }
